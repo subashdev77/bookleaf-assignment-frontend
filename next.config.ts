@@ -1,10 +1,8 @@
 import type { NextConfig } from "next";
 
+const API_PROXY_TARGET = process.env.API_PROXY_TARGET || "http://localhost:5000";
+
 const nextConfig: NextConfig = {
-  /* config options here */
-  experimental: {
-    agentFeedback: true,
-  },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
@@ -14,6 +12,9 @@ const nextConfig: NextConfig = {
         as: "*.css",
       },
     },
+  },
+  async rewrites() {
+    return [{ source: "/api/:path*", destination: `${API_PROXY_TARGET}/api/:path*` }];
   },
 };
 
